@@ -3,6 +3,7 @@ import { CatsTypes, PaginationTypes } from "@/types/CatsType";
 import {
   Box,
   Card,
+  Drawer,
   Grid,
   IconButton,
   Pagination,
@@ -12,11 +13,15 @@ import axios from "axios";
 import Image from "next/image";
 import React, { Fragment, useEffect, useState } from "react";
 import { ZoomIn } from "@mui/icons-material";
+import DetailsDrawer from "./DetailsDrawer";
 
 export default function ListOfCats() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cats, setCats] = useState<CatsTypes[]>([]);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedCat, setSelectedCat] = useState<CatsTypes | null>(null);
 
   const [pagination, setPagination] = useState<PaginationTypes>({
     limit: 100,
@@ -65,7 +70,7 @@ export default function ListOfCats() {
 
   return (
     <Fragment>
-      <Grid container spacing={3}>
+      <Grid sx={{ p: 1 }} container spacing={3}>
         {isLoading
           ? Array.from({ length: 100 })?.map((cat, index) => (
               <Fragment key={index}>
@@ -103,6 +108,10 @@ export default function ListOfCats() {
               <Fragment key={index}>
                 <Grid item xs={12} sm={6} xl={2.3} lg={4}>
                   <Card
+                    onClick={() => {
+                      setDrawerOpen(true);
+                      setSelectedCat(cat);
+                    }}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
                     style={{
@@ -197,6 +206,28 @@ export default function ListOfCats() {
           shape="rounded"
         />
       </Box>
+
+      {selectedCat ? (
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          sx={{
+            "& .MuiDrawer-paper": {
+              width: {
+                xs: "100%",
+                sm: "60%",
+                md: "60%",
+                lg: "50%",
+                xl: "30%",
+                xxl: "20%",
+              },
+            },
+          }}
+        >
+          <DetailsDrawer selectedCat={selectedCat} setDrawerOpen={setDrawerOpen} />
+        </Drawer>
+      ) : null}
     </Fragment>
   );
 }
