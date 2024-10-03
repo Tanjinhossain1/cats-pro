@@ -4,12 +4,11 @@ import {
   Box,
   Card,
   CardMedia,
-  Container,
   Grid,
   Pagination,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 
 export default function ListOfCats({
   catsData,
@@ -52,11 +51,10 @@ export default function ListOfCats({
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <Container sx={{ mb: 5 }}>
-  
-      <Grid container spacing={3}>
+    <Fragment>
+      <Grid container  spacing={3}>
         {cats?.map((cat, index) => (
-          <Grid item xs={12} sm={6} md={2.3} key={index}>
+          <Grid item xs={12} sm={6}  xl={2.3} lg={4} key={index}>
             <Card>
               <CardMedia
                 component="img"
@@ -74,7 +72,7 @@ export default function ListOfCats({
         ))}
       </Grid>
       {/* pagination component show here  */}
-      <Box display="flex" justifyContent="center" mt={4}>
+      <Box display="flex" justifyContent="center" mb={5} mt={4}>
         <Pagination
           count={totalPages}
           page={pagination.page}
@@ -84,6 +82,6 @@ export default function ListOfCats({
           shape="rounded"
         />
       </Box>
-    </Container>
+    </Fragment>
   );
 }

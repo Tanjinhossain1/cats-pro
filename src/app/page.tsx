@@ -1,4 +1,5 @@
 import ListOfCats from "@/components/HomePage/ListOfCats";
+import { DashboardLayout } from "@toolpad/core";
 import axios from "axios";
 import { Fragment } from "react";
 
@@ -11,17 +12,19 @@ export default async function Home() {
       },
     }
   );
-  
+
   return (
     <Fragment>
-      <ListOfCats
-        paginationData={{
-          limit: Number(catsResponse?.headers["pagination-limit"]),
-          page: Number(catsResponse?.headers["pagination-page"]),
-          total: Number(catsResponse?.headers["pagination-count"]),
-        }}
-        catsData={catsResponse?.data}
-      />
+      <DashboardLayout >
+        <ListOfCats
+          paginationData={{
+            limit: Number(catsResponse?.headers["pagination-limit"]),
+            page: Number(catsResponse?.headers["pagination-page"]),
+            total: Number(catsResponse?.headers["pagination-count"]),
+          }}
+          catsData={catsResponse?.data}
+        />
+      </DashboardLayout>
     </Fragment>
   );
 }
