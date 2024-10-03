@@ -216,8 +216,8 @@ export default function ListOfCats() {
             "& .MuiDrawer-paper": {
               width: {
                 xs: "100%",
-                sm: "60%",
-                md: "60%",
+                sm: "80%",
+                md: "80%",
                 lg: "50%",
                 xl: "30%",
                 xxl: "20%",
