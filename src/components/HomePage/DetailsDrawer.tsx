@@ -58,7 +58,7 @@ export default function DetailsDrawer({
       {selectedCat?.breeds && selectedCat?.breeds[0] ? (
         <Box sx={{ ml: 2, mb: 5 }}>
           <Typography
-            sx={{ fontSize: 22, color: "#192c3d", fontWeight: 600, mt: 1 }}
+            sx={{ fontSize: 22, fontWeight: 600, mt: 1 }}
             component={"h1"}
           >
             <span style={{ textDecoration: "underline" }}>Bread Details</span>:-
@@ -78,7 +78,7 @@ export default function DetailsDrawer({
           />
 
           <Typography
-            sx={{ fontSize: 22, color: "#192c3d", fontWeight: 600, mt: 3 }}
+            sx={{ fontSize: 22, fontWeight: 600, mt: 3 }}
             component={"h1"}
           >
             <span style={{ textDecoration: "underline" }}>Weight</span>:-
@@ -94,7 +94,7 @@ export default function DetailsDrawer({
           />
 
           <Typography
-            sx={{ fontSize: 22, color: "#192c3d", fontWeight: 600, mt: 3 }}
+            sx={{ fontSize: 22, fontWeight: 600, mt: 3 }}
             component={"h1"}
           >
             <span style={{ textDecoration: "underline" }}>Description</span>:-
@@ -113,7 +113,7 @@ export default function DetailsDrawer({
           </Typography>
 
           <Typography
-            sx={{ fontSize: 22, color: "#192c3d", fontWeight: 600, mt: 3 }}
+            sx={{ fontSize: 22, fontWeight: 600, mt: 3 }}
             component={"h1"}
           >
             <span style={{ textDecoration: "underline" }}>

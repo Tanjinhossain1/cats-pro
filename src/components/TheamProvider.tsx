@@ -4,6 +4,7 @@ import { Navigation } from "@toolpad/core";
 import { AppProvider } from "@toolpad/core/nextjs";
 import HomeIcon from "@mui/icons-material/Home";
 import PetsIcon from "@mui/icons-material/Pets";
+import { Suspense } from "react";
 
 const theme = createTheme({
   cssVariables: {
@@ -28,6 +29,7 @@ export const NAVIGATION = [
   },
   {
     kind: "home",
+    segment: "/",
     title: "Home",
     icon: <HomeIcon />,
   },
@@ -38,16 +40,18 @@ export default function CustomThemeProvider({
   children: React.ReactNode;
 }>) {
   return (
-    <AppProvider
-      branding={{
-        title: "Cats-Pro",
-        logo: <PetsIcon color="primary" sx={{ mt: 1 }} />,
-      }}
-      navigation={NAVIGATION as Navigation}
-      theme={theme}
-    >
-      <CssBaseline />
-      {children}
-    </AppProvider>
+    <Suspense>
+      <AppProvider
+        branding={{
+          title: "Cats-Pro",
+          logo: <PetsIcon color="primary" sx={{ mt: 1 }} />,
+        }}
+        navigation={NAVIGATION as Navigation}
+        theme={theme}
+      >
+        <CssBaseline />
+        {children}
+      </AppProvider>
+    </Suspense>
   );
 }
