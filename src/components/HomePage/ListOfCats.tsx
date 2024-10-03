@@ -21,22 +21,25 @@ import { ZoomIn } from "@mui/icons-material";
 import DetailsDrawer from "./DetailsDrawer";
 
 type FilterOrderType = "ASC" | "DESC" | "RAND";
+
 export default function ListOfCats() {
+  // all states 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cats, setCats] = useState<CatsTypes[]>([]);
+
   const [filterByOrder, setFilterByOrder] = useState<FilterOrderType>("DESC");
   const [listOfBreeds, setListOfBreeds] = useState<CatBreadDetails[]>([]);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedCat, setSelectedCat] = useState<CatsTypes | null>(null);
 
+  const [selectedCat, setSelectedCat] = useState<CatsTypes | null>(null);
   const [pagination, setPagination] = useState<PaginationTypes>({
     limit: 100,
     page: 1,
     total: 0,
   });
 
+  // fetch data from api
   const fetchCats = async (
     page: number,
     order?: FilterOrderType,
@@ -74,7 +77,9 @@ export default function ListOfCats() {
     });
     fetchCats(newPage);
   };
+
   useEffect(() => {
+    // get all breeds for filtering
     const fetchBreads = async () => {
       try {
         const catsBreedsResponse = await axios.get(
