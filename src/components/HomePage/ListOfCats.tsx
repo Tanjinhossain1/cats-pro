@@ -223,19 +223,21 @@ export default function ListOfCats() {
                       overflow: "hidden",
                       borderRadius: "8px",
                       boxShadow:
-                        hoveredIndex === index
-                          ? "0 8px 16px rgba(0, 0, 0, 0.3)"
-                          : "none",
+                      hoveredIndex === index
+                      ? "0 8px 16px rgba(0, 0, 0, 0.3)"
+                      : "none",
                       transition: "box-shadow 0.3s ease",
                     }}
-                  >
+                    >
                     <Image
                       src={cat.url}
                       alt={`Cat ${index + 1}`}
                       height={300}
                       width={300}
                       style={{
+                        border:'1px solid gray',
                         objectFit: "cover",
+                        borderRadius: "8px",
                         height: "200px",
                         width: "100%",
                         transition: "transform 0.3s ease-in-out",
