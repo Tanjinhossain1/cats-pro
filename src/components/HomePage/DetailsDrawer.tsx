@@ -106,9 +106,7 @@ export default function DetailsDrawer({
             sx={{
               fontSize: 16,
               ml: 5,
-              bgcolor: "#f0f7fc",
               p: 1,
-              borderRadius: "15px",
             }}
           >
             {selectedCat?.breeds?.[0]?.description}
