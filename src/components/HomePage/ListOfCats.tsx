@@ -79,7 +79,7 @@ export default function ListOfCats() {
   };
 
   useEffect(() => {
-    // get all breeds for filtering
+    // get all breeds for filtering and display
     const fetchBreads = async () => {
       try {
         const catsBreedsResponse = await axios.get(
