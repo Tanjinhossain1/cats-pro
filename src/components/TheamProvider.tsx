@@ -29,7 +29,6 @@ export const NAVIGATION = [
   },
   {
     kind: "home",
-    segment: "/",
     title: "Home",
     icon: <HomeIcon />,
   },

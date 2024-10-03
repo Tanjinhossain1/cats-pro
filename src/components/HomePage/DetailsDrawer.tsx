@@ -44,10 +44,12 @@ export default function DetailsDrawer({
           loading="lazy"
         />
       </Box>
-          {
-            selectedCat?.categories && selectedCat?.categories[0] || selectedCat?.breeds && selectedCat?.breeds[0]  ? null :
-            <Typography sx={{textAlign:"center",fontSize:20}}>No More Details 😅</Typography>
-          }
+      {(selectedCat?.categories && selectedCat?.categories[0]) ||
+      (selectedCat?.breeds && selectedCat?.breeds[0]) ? null : (
+        <Typography sx={{ textAlign: "center", fontSize: 20 }}>
+          No More Details 😅
+        </Typography>
+      )}
       {selectedCat?.categories && selectedCat?.categories[0] ? (
         <CommonGridComponent
           label="Categories"
@@ -111,31 +113,36 @@ export default function DetailsDrawer({
           >
             {selectedCat?.breeds?.[0]?.description}
           </Typography>
-
-          <Typography
-            sx={{ fontSize: 22, fontWeight: 600, mt: 3 }}
-            component={"h1"}
-          >
+            {
+                selectedCat?.breeds?.[0]?.vetstreet_url || selectedCat?.breeds?.[0]?.wikipedia_url ? 
+                <Typography
+                sx={{ fontSize: 22, fontWeight: 600, mt: 3 }}
+                component={"h1"}
+                >
             <span style={{ textDecoration: "underline" }}>
               Other Details Link
             </span>
             :-
           </Typography>
-
+        : null}
           <Typography>
-            <Link
-              target="_blank"
-              href={selectedCat?.breeds?.[0]?.vetstreet_url}
-            >
-              Vetstreet
-            </Link>
-            <Link
-              target="_blank"
-              style={{ marginLeft: "10px" }}
-              href={selectedCat?.breeds?.[0]?.wikipedia_url}
-            >
-              Wikipedia
-            </Link>
+            {selectedCat?.breeds?.[0]?.vetstreet_url ? (
+              <Link
+                target="_blank"
+                href={selectedCat?.breeds?.[0]?.vetstreet_url}
+              >
+                Vetstreet
+              </Link>
+            ) : null}
+            {selectedCat?.breeds?.[0]?.wikipedia_url ? (
+              <Link
+                target="_blank"
+                style={{ marginLeft: "10px" }}
+                href={selectedCat?.breeds?.[0]?.wikipedia_url}
+              >
+                Wikipedia
+              </Link>
+            ) : null}
           </Typography>
         </Box>
       ) : null}

@@ -1,13 +1,18 @@
 "use client";
-import { CatsTypes, PaginationTypes } from "@/types/CatsType";
+import { CatBreadDetails, CatsTypes, PaginationTypes } from "@/types/CatsType";
 import {
   Box,
+  Button,
   Card,
   Drawer,
+  FormControl,
   Grid,
   IconButton,
+  MenuItem,
   Pagination,
+  Select,
   Skeleton,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
 import Image from "next/image";
@@ -15,10 +20,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import { ZoomIn } from "@mui/icons-material";
 import DetailsDrawer from "./DetailsDrawer";
 
+type FilterOrderType = "ASC" | "DESC" | "RAND";
 export default function ListOfCats() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [cats, setCats] = useState<CatsTypes[]>([]);
+  const [filterByOrder, setFilterByOrder] = useState<FilterOrderType>("DESC");
+  const [listOfBreeds, setListOfBreeds] = useState<CatBreadDetails[]>([]);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState<CatsTypes | null>(null);
@@ -29,11 +37,15 @@ export default function ListOfCats() {
     total: 0,
   });
 
-  const fetchCats = async (page: number) => {
+  const fetchCats = async (
+    page: number,
+    order?: FilterOrderType,
+    searchByBreed?: string
+  ) => {
     setIsLoading(true);
     try {
       const catsResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_CATS_API_SERVER_URL}/search?limit=${pagination?.limit}&page=${page}&order=DESC`,
+        `${process.env.NEXT_PUBLIC_CATS_API_SERVER_URL}/images/search?limit=${pagination?.limit}&page=${page}&order=${order ? order : filterByOrder}${searchByBreed ? `&breed_ids=${searchByBreed}` : ""}`,
         {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_CATS_API_KEY,
@@ -63,6 +75,23 @@ export default function ListOfCats() {
     fetchCats(newPage);
   };
   useEffect(() => {
+    const fetchBreads = async () => {
+      try {
+        const catsBreedsResponse = await axios.get(
+          `${process.env.NEXT_PUBLIC_CATS_API_SERVER_URL}/breeds`,
+          {
+            headers: {
+              "x-api-key": process.env.NEXT_PUBLIC_CATS_API_KEY,
+            },
+          }
+        );
+        setListOfBreeds(catsBreedsResponse.data);
+      } catch (error) {
+        setIsLoading(false);
+        console.error("Error fetching Breeds:", error);
+      }
+    };
+    fetchBreads();
     fetchCats(1);
   }, []);
 
@@ -70,6 +99,76 @@ export default function ListOfCats() {
 
   return (
     <Fragment>
+      <Grid textAlign={"left"} alignItems={"center"} container>
+        <Grid xs={2.2} lg={1}>
+          <Typography sx={{ fontSize: 16, pl: 1,fontWeight:600 }}>Filters:- </Typography>
+        </Grid>
+        {["ASC", "DESC", "RAND"].map((filter: string) => {
+          return (
+            <Grid key={filter} xs={1.7} lg={0.9}>
+              <Button
+                onClick={() => {
+                  setFilterByOrder(filter as FilterOrderType);
+                  fetchCats(pagination.page, filter as FilterOrderType);
+                }}
+                disabled={filterByOrder === filter}
+                sx={{ textDecoration: "underline" }}
+              >
+                {filter}
+              </Button>
+            </Grid>
+          );
+        })}
+        <Grid xs={0.5}></Grid>
+        <Grid xs={4} md={4} lg={1.5} xl={1.3}>
+          <FormControl variant="outlined" fullWidth>
+            <Select
+              renderValue={(value: string) => {
+                const selectedBreed = listOfBreeds.find(
+                  (breed) => breed.id === value
+                );
+                return selectedBreed ? selectedBreed.name : "Select Breed";
+              }}
+              onChange={(e) =>
+                fetchCats(pagination.page, "RAND", e.target.value)
+              }
+              labelId="breed-select-label"
+              displayEmpty
+              disableUnderline
+              placeholder="dksjf"
+              variant="standard"
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 80 * 5,
+                    fontSize: "12px",
+                  },
+                },
+              }}
+              sx={{
+                "& .MuiSelect-select": {
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  height: "300px",
+                },
+                "& .MuiSelect-icon": {
+                  marginLeft: 1,
+                },
+                border: "none",
+                boxShadow: "none",
+              }}
+            >
+              {listOfBreeds.map((breed, index) => (
+                <MenuItem key={index} value={breed.id}>
+                  {breed.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Grid>
+
       <Grid sx={{ p: 1 }} container spacing={3}>
         {isLoading
           ? Array.from({ length: 100 })?.map((cat, index) => (
@@ -195,8 +294,9 @@ export default function ListOfCats() {
             ))
           : null}
       </Grid>
-
-      <Box display="flex" justifyContent="center" mb={5} mt={4}>
+      {
+        totalPages > 0 ?
+        <Box display="flex" justifyContent="center" mb={5} mt={4}>
         <Pagination
           count={totalPages}
           page={pagination.page}
@@ -204,8 +304,9 @@ export default function ListOfCats() {
           color="secondary"
           variant="outlined"
           shape="rounded"
-        />
+          />
       </Box>
+      :null  }
 
       {selectedCat ? (
         <Drawer
@@ -225,7 +326,10 @@ export default function ListOfCats() {
             },
           }}
         >
-          <DetailsDrawer selectedCat={selectedCat} setDrawerOpen={setDrawerOpen} />
+          <DetailsDrawer
+            selectedCat={selectedCat}
+            setDrawerOpen={setDrawerOpen}
+          />
         </Drawer>
       ) : null}
     </Fragment>
