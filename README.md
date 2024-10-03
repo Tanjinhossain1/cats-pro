@@ -13,7 +13,7 @@ Display the list of cats and when hover the mouse then some zoom the image and w
 I add the .env file in my code and use that for data fetching but i can't give it in .gitignore because of test and no need to create .env file it already there just run the app after install the dependencies
 <hr />
 
-##Dependencies
+## Dependencies
 <ul>
   <li><b>React</b></li> React latest version (next)
   <li><b>Typescript</b></li> Using typescript for safety the data type and codes
